@@ -15,7 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import RedirectView
+
+from products import views
 
 urlpatterns = [
+    path('', RedirectView.as_view(pattern_name='home')),
     path('admin/', admin.site.urls),
+    path('upload/', views.simple_upload, name='simple-upload'),
+    path('stream/', views.stream, name='stream'),
+    path('products/', views.ProductListView.as_view(), name='home'),
+    path('products/add/', views.ProductCreateView.as_view(), name='product-add'),
+    path('product/<pk>/', views.ProductDetailView.as_view(), name='product-view'),
+    path('product/<pk>/update/', views.ProductUpdateView.as_view(), name='product-update'),
+    path('product/<pk>/delete/', views.ProductDeleteView.as_view(), name='product-delete')
 ]

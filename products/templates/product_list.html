@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Records</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+</head>
+<body>
+<div id="result"></div>
+<table class="table table-striped table-bordered table-sm">
+    <thead class="thead-dark">
+    {% if page_obj %}
+        <tr>
+            <th>Product Name</th>
+            <th>Product Sku</th>
+            <th>Product Description</th>
+            <th>Product Availability</th>
+            <th>Actions</th>
+        </tr>
+    {% endif %}
+    </thead>
+    <tbody>
+    {% for product in page_obj %}
+    <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.sku }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.active }}</td>
+        <td>
+            <a href="{% url 'product-view' product.id %}"><span class="glyphicon glyphicon-pencil" >View</span></a>
+            <a href="{% url 'product-update' product.id %}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
+            <a href="{% url 'product-delete' product.id %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            {% if page_obj %}
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+</div>
+<br>
+<br>
+<center><a href="{% url 'product-add' %}" class="btn btn-primary">Add New Record</a></center>
+</body>
+<script>
+if(typeof(EventSource) !== "undefined") {
+  var source = new EventSource("/stream/");
+  source.onmessage = function(event) {
+    document.getElementById("result").innerHTML = "<h3>Getting server updates</h3><div>" + event.data + "</div><br>";
+  };
+} else {
+  document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+}
+</script>
+</html>  
