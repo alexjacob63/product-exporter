@@ -15,6 +15,7 @@ class FileUploadHandler(object):
 
     def remove_duplicates(self):
         self.df.drop_duplicates('sku', inplace=True)
+        self.df['sku'] = self.df['sku'].str.lower()
 
     def save_products(self):
         self.remove_duplicates()

@@ -3,14 +3,17 @@
 {% block title %}
    <title>CSV Upload</title>
 {% endblock title %}
-{% load static %}
-{% block content %}
 
+{% block content %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="file" name="myFile">
-    <button type="submit">Upload</button>
+    <div class="form-group">
+        <label for="exampleFormControlFile1">Products bulk upload</label>
+        <input type="file" name="myFile" class="form-control-file" id="exampleFormControlFile1">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-outline-dark">Upload</button>
+    </div>
 </form>
 
-<p><a href="{% url 'home' %}">Return to home</a></p>
 {% endblock %}

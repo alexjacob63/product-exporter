@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends 'base.html' %}
+
+{% block title %}
     <title>Product Records</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
 <div id="result"></div>
 <table class="table table-striped table-bordered table-sm">
     <thead class="thead-dark">
@@ -57,16 +55,17 @@
 </div>
 <br>
 <br>
-<center><a href="{% url 'product-add' %}" class="btn btn-primary">Add New Record</a></center>
-</body>
+<center><a href="{% url 'product-add' %}" class="btn btn-primary">Add New Product</a></center>
+<center><a href="{% url 'delete-all' %}" class="btn btn-primary">Delete all Products</a></center>
 <script>
 if(typeof(EventSource) !== "undefined") {
   var source = new EventSource("/stream/");
   source.onmessage = function(event) {
-    document.getElementById("result").innerHTML = "<h3>Getting server updates</h3><div>" + event.data + "</div><br>";
+    document.getElementById("result").innerHTML = "<h3>Products saving in progress</h3><div>" + event.data + "</div><br>";
   };
 } else {
   document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
 }
 </script>
-</html>  
+{% endblock %}
+
