@@ -4,7 +4,7 @@ from django.dispatch import receiver
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
     sku = models.CharField(max_length=20, unique=True)
     description = models.TextField()
     active = models.BooleanField(default=True)

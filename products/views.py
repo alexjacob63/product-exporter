@@ -77,7 +77,7 @@ class ProductDeleteAll(DeleteView):
 
 def simple_upload(request):
     if request.method == 'POST' and request.FILES.get('myFile'):
-        with open('my_named_tmp',  'wb') as f:
+        with tempfile.NamedTemporaryFile(delete=False) as f:
             for chunk in request.FILES["myFile"].chunks():
                 f.write(chunk)
         handle_file_upload.delay(f.name)
