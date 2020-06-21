@@ -1,21 +1,43 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    <title>Product Records</title>
+<title>Product Records</title>
 {% endblock %}
 
 {% block content %}
 <div id="result"></div>
+
+<div class="row mb-2">
+    <div class="col-5">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search by Name or Sku" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <select class="custom-select">
+            <option value="1">All Products</option>
+            <option value="2">Active Products</option>
+            <option value="3">Inactive Products</option>
+        </select>
+    </div>
+    <div class="col-4">
+        <a href="{% url 'delete-all' %}" class="btn btn-outline-danger">Delete all Products</a>
+        <a href="{% url 'product-add' %}" class="btn btn-outline-primary">Add New Product</a>
+    </div>
+</div>
 <table class="table table-striped table-bordered table-sm">
     <thead class="thead-dark">
     {% if page_obj %}
-        <tr>
-            <th>Product Name</th>
-            <th>Product Sku</th>
-            <th>Product Description</th>
-            <th>Product Availability</th>
-            <th>Actions</th>
-        </tr>
+    <tr>
+        <th>Product Name</th>
+        <th>Product Sku</th>
+        <th>Product Description</th>
+        <th>Product Availability</th>
+        <th>Actions</th>
+    </tr>
     {% endif %}
     </thead>
     <tbody>
@@ -26,45 +48,57 @@
         <td>{{ product.description }}</td>
         <td>{{ product.active }}</td>
         <td>
-            <a href="{% url 'product-view' product.id %}"><span class="glyphicon glyphicon-pencil" >View</span></a>
-            <a href="{% url 'product-update' product.id %}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>
+            <a href="{% url 'product-view' product.id %}"><span class="glyphicon glyphicon-pencil">View</span></a>
+            <a href="{% url 'product-update' product.id %}"><span class="glyphicon glyphicon-pencil">Edit</span></a>
             <a href="{% url 'product-delete' product.id %}">Delete</a>
         </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-<div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">previous</a>
-            {% endif %}
+<ul class="pagination justify-content-end">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+        <a class="page-link"
+           href="?page=1{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;
+            first</a>
+    </li>
+    <li class="page-item">
+        <a class="page-link"
+           href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">previous</a>
+    </li>
+    {% endif %}
 
-            {% if page_obj %}
-                <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-            {% endif %}
+    {% if page_obj %}
+    <li class="page-item">
+        <a class="page-link">
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+        </a>
+    </li>
+    {% endif %}
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">last &raquo;</a>
-            {% endif %}
-        </span>
-</div>
-<br>
-<br>
-<center><a href="{% url 'product-add' %}" class="btn btn-primary">Add New Product</a></center>
-<center><a href="{% url 'delete-all' %}" class="btn btn-primary">Delete all Products</a></center>
+    {% if page_obj.has_next %}
+    <li class="page-item">
+        <a class="page-link"
+           href="?page={{ page_obj.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">next</a>
+    </li>
+    <li class="page-item">
+        <a class="page-link"
+           href="?page={{ page_obj.paginator.num_pages }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">last
+            &raquo;</a>
+    </li>
+    {% endif %}
+</ul>
 <script>
 if(typeof(EventSource) !== "undefined") {
-  var source = new EventSource("/stream/");
-  source.onmessage = function(event) {
-    document.getElementById("result").innerHTML = "<h3>Products saving in progress</h3><div>" + event.data + "</div><br>";
-  };
+ var source = new EventSource("/stream/");
+ source.onmessage = function(event) {
+   document.getElementById("result").innerHTML = '<div class="alert alert-primary"><h5>Products saving in progress</h5><div>'+ event.data +'</div></div>';
+ };
 } else {
-  document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
+ document.getElementById("result").innerHTML = '<div class="alert alert-warning"><div>Sorry, your browser does not support server-sent events...</div></div>';
 }
 </script>
 {% endblock %}
