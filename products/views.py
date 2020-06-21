@@ -14,7 +14,7 @@ from .tasks import handle_file_upload
 class ProductListView(ListView):
     model = Product
     template_name = 'product_list.html'
-    paginate_by = 20
+    paginate_by = 10
     ordering = ['-id']
 
     def get_queryset(self):
@@ -23,6 +23,11 @@ class ProductListView(ListView):
             query = self.request.GET.get('q')
             lookups = Q(name__icontains=query) | Q(sku__icontains=query)
             query_set = query_set.filter(lookups)
+        if self.request.GET.get('active'):
+            query = self.request.GET.get('active')
+            query = {'true': True, 'false': False}.get(query)
+            if query in [True, False]:
+                query_set = query_set.filter(active=query)
         return query_set
 
 
