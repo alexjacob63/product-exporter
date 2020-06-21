@@ -7,7 +7,7 @@ from .models import Product
 
 class FileUploadHandler(object):
 
-    batch_size = 500
+    batch_size = 100
 
     def __init__(self, file_path):
         self.path = file_path

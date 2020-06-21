@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+import dj_database_url
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +27,7 @@ SECRET_KEY = 'sowlux3_*9l=)0p6!%qj6qq5mnxp41w6-63pq$=@$6an7oucr)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["product-extractor.herokuapp.com"]
+ALLOWED_HOSTS = ['product-extractor.herokuapp.com', '127.0.0.1', 'alex-jacob-assignment.herokuapp.com']
 
 
 # Application definition
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'products',
+    # 'whitenoise.runserver_nostatic'
 ]
 
 MIDDLEWARE = [
@@ -48,7 +51,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'exporter.urls'
 
@@ -74,13 +80,25 @@ WSGI_APPLICATION = 'exporter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'exporter',
+        'USER': 'my_user',
+        'PASSWORD': 'my_password',
+        'HOST': 'localhost'
     }
 }
 
+# db_from_env = dj_database_url.config(conn_max_age=600)
+# DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -120,7 +138,7 @@ USE_TZ = True
 
 # STATIC_URL = '/static/'
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://localhost')
 
 CELERY_TASK_ROUTES = {
     '*.tasks.*': {'queue': 'queue1'},

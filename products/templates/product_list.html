@@ -9,18 +9,20 @@
 
 <div class="row mb-2">
     <div class="col-5">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Search by Name or Sku" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+        <form>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control"  name="q" id="searchTxt" placeholder="Search by Name or Sku" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
     <div class="col-3">
-        <select class="custom-select">
-            <option value="1">All Products</option>
-            <option value="2">Active Products</option>
-            <option value="3">Inactive Products</option>
+        <select class="custom-select" onchange="location.href = '/products'+this.value;">
+            <option value="">All Products</option>
+            <option value="?active=true">Active Products</option>
+            <option value="?active=false">Inactive Products</option>
         </select>
     </div>
     <div class="col-4">
@@ -102,4 +104,3 @@ if(typeof(EventSource) !== "undefined") {
 }
 </script>
 {% endblock %}
-
