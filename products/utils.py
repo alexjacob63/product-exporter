@@ -9,10 +9,11 @@ class FileUploadHandler(object):
 
     batch_size = 500
 
-    def __init__(self, file_path):
+    def __init__(self, df):
         print("************************, inside file upload handler")
-        self.path = file_path
-        self.df = pd.read_csv(file_path)
+        # self.path = file_path
+        # self.df = pd.read_csv(file_path)
+        self.df = df
 
     def remove_duplicates(self):
         print("**************, removing duplicates")
@@ -40,4 +41,4 @@ class FileUploadHandler(object):
         if to_save:
             Product.objects.bulk_create(to_save)
 
-        os.remove(self.path)
+        # os.remove(self.path)
