@@ -138,7 +138,7 @@ USE_TZ = True
 
 # STATIC_URL = '/static/'
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://localhost')
 
 CELERY_TASK_ROUTES = {
     '*.tasks.*': {'queue': 'queue1'},
