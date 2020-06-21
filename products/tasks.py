@@ -4,6 +4,11 @@ from celery import shared_task
 from .utils import FileUploadHandler
 
 
+@shared_task
+def add(x, y):
+    return x + y
+
+
 @shared_task()
 def handle_file_upload(file_path):
     handler = FileUploadHandler(file_path)

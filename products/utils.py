@@ -10,10 +10,12 @@ class FileUploadHandler(object):
     batch_size = 500
 
     def __init__(self, file_path):
+        print("************************, inside file upload handler")
         self.path = file_path
         self.df = pd.read_csv(file_path)
 
     def remove_duplicates(self):
+        print("**************, removing duplicates")
         self.df.drop_duplicates('sku', inplace=True)
         self.df['sku'] = self.df['sku'].str.lower()
 
