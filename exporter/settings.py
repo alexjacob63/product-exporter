@@ -25,7 +25,7 @@ SECRET_KEY = 'sowlux3_*9l=)0p6!%qj6qq5mnxp41w6-63pq$=@$6an7oucr)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["product-extractor.herokuapp.com"]
 
 
 # Application definition
